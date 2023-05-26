@@ -3,8 +3,11 @@ import 'package:boxed/src/presentation/themes.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
+  final bool isNotGettingStarted;
+
   const MyApp({
     super.key,
+    required this.isNotGettingStarted,
   });
 
   @override
@@ -14,7 +17,8 @@ class MyApp extends StatelessWidget {
       children: [
         MaterialApp(
           onGenerateRoute: Routes.onGenerateRoute,
-          initialRoute: Routes.gettingStarted,
+          initialRoute:
+              isNotGettingStarted ? Routes.home : Routes.gettingStarted,
           theme: BoxedThemes.lightTheme,
         )
       ],
