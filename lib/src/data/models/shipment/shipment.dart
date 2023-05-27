@@ -8,11 +8,15 @@ class Shipment extends Equatable {
   final String name;
   final String code;
   final String company;
+  final String lastEvent;
+  final String lastEventDescription;
 
   const Shipment({
     required this.name,
     required this.code,
     required this.company,
+    required this.lastEvent,
+    required this.lastEventDescription,
   });
 
   @override

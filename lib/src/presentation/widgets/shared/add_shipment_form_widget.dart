@@ -1,8 +1,10 @@
 import 'package:boxed/src/core/constants/colors.dart';
 import 'package:boxed/src/core/constants/companies.dart';
+import 'package:boxed/src/core/instances.dart';
 import 'package:boxed/src/data/models/shipment/shipment.dart';
 import 'package:boxed/src/logic/cubits/correios/shipment_correios_cubit.dart';
 import 'package:boxed/src/logic/cubits/correios/shipment_correios_state.dart';
+import 'package:boxed/src/logic/cubits/shipment/shipment_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -27,6 +29,9 @@ class _AddShipmentFormState extends State<AddShipmentFormWidget> {
   void onShipmentListen(BuildContext context, ShipmentCorreiosState state) {
     if (state is AddedShipmentCorreiosState) {
       Navigator.pop(context);
+
+      var shipmentCubit = Instances.it.get<ShipmentCubit>();
+      shipmentCubit.listShipments();
     }
   }
 
@@ -36,8 +41,8 @@ class _AddShipmentFormState extends State<AddShipmentFormWidget> {
         var nickname = nickNameController.text;
         var trackingCode = trackCodeController.text.trim().toUpperCase();
 
-        await addShipmentCorreiosCubit.addShipment(Shipment(
-            name: nickname, code: trackingCode, company: actualCompany));
+        await addShipmentCorreiosCubit.addShipment(
+            nickname, trackingCode, actualCompany);
       }
     }
   }

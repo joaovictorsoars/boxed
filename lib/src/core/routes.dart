@@ -1,5 +1,6 @@
 import 'package:boxed/src/core/instances.dart';
 import 'package:boxed/src/logic/cubits/correios/shipment_correios_cubit.dart';
+import 'package:boxed/src/logic/cubits/shipment/shipment_cubit.dart';
 import 'package:boxed/src/presentation/pages/getting_started_page.dart';
 import 'package:boxed/src/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +15,10 @@ abstract class Routes {
   static Route onGenerateRoute(RouteSettings settings) {
     final routes = {
       gettingStarted: const GettingStartedPage(),
-      home: const HomePage(),
+      home: BlocProvider<ShipmentCubit>.value(
+        value: Instances.it.get(),
+        child: const HomePage(),
+      ),
     };
 
     return MaterialPageRoute(

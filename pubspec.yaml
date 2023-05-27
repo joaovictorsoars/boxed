@@ -22,6 +22,7 @@ dependencies:
   lottie: ^2.3.2
   phosphor_flutter: ^2.0.0
   retrofit: ^4.0.1
+  shimmer: ^3.0.0
   smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
@@ -38,6 +39,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/companies/
     - assets/lottie/
 
   fonts:

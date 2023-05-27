@@ -12,15 +12,11 @@ void main() async {
   await Instances.instantiate();
 
   var storage = Instances.it.get<FlutterSecureStorage>();
-  var isNotGettingStarted =
-      await storage.read(key: StorageKeys.isNotGettingStarted) == 'true';
+  var isGettingStarted =
+      await storage.read(key: StorageKeys.isGettingStarted) == 'true';
 
   var tokenCorreiosCubit = Instances.it.get<TokenCorreiosCubit>();
   await tokenCorreiosCubit.saveToken();
 
-  print(await storage.read(key: StorageKeys.correiosToken));
-
-  runApp(MyApp(
-    isNotGettingStarted: isNotGettingStarted,
-  ));
+  runApp(MyApp(isGettingStarted));
 }

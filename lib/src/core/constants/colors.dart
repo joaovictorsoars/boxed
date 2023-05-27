@@ -4,6 +4,7 @@ abstract class BoxedColors {
   static const primary = Color(0xFFF6F930);
   static const gray = Color(0xFF2F2F2F);
   static const grayLight = Color(0xFFEAEAEA);
+  static const grayShimmer = Color(0xFFFAFAFA);
   static const blue = Color(0xFF97DBF7);
   static const blueDark = Color(0xFF223238);
   static const red = Color(0xFFF79A97);

@@ -170,7 +170,7 @@ class _GettingStartedPageState extends State<GettingStartedPage> {
                   InkWell(
                     onTap: () async {
                       await const FlutterSecureStorage().write(
-                          key: StorageKeys.isNotGettingStarted, value: 'true');
+                          key: StorageKeys.isGettingStarted, value: 'true');
 
                       if (context.mounted) {
                         Navigator.of(context).pushNamed(Routes.home);
