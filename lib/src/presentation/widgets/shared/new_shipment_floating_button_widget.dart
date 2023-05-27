@@ -1,6 +1,9 @@
 import 'package:boxed/src/core/constants/colors.dart';
+import 'package:boxed/src/core/instances.dart';
+import 'package:boxed/src/logic/cubits/correios/shipment_correios_cubit.dart';
 import 'package:boxed/src/presentation/widgets/shared/add_shipment_form_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class NewShipmentFloatingButtonWidget extends StatelessWidget {
@@ -46,7 +49,10 @@ class NewShipmentFloatingButtonWidget extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.only(bottom: paddingBottom),
-            child: const AddShipmentFormWidget(),
+            child: BlocProvider<ShipmentCorreiosCubit>.value(
+              value: Instances.it.get(),
+              child: const AddShipmentFormWidget(),
+            ),
           ),
         ],
       ),

@@ -1,5 +1,10 @@
 import 'package:boxed/src/core/constants/colors.dart';
+import 'package:boxed/src/core/constants/companies.dart';
+import 'package:boxed/src/data/models/shipment/shipment.dart';
+import 'package:boxed/src/logic/cubits/correios/shipment_correios_cubit.dart';
+import 'package:boxed/src/logic/cubits/correios/shipment_correios_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class AddShipmentFormWidget extends StatefulWidget {
@@ -10,8 +15,32 @@ class AddShipmentFormWidget extends StatefulWidget {
 }
 
 class _AddShipmentFormState extends State<AddShipmentFormWidget> {
+  final nickNameController = TextEditingController();
+  final trackCodeController = TextEditingController();
   final List<String> companies = ['Correios', 'TNT Express', 'Sequoia'];
   final _formKey = GlobalKey<FormState>();
+  late final ShipmentCorreiosCubit addShipmentCorreiosCubit =
+      context.read<ShipmentCorreiosCubit>();
+
+  var actualCompany = '';
+
+  void onShipmentListen(BuildContext context, ShipmentCorreiosState state) {
+    if (state is AddedShipmentCorreiosState) {
+      Navigator.pop(context);
+    }
+  }
+
+  void submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      if (actualCompany == Companies.correios) {
+        var nickname = nickNameController.text;
+        var trackingCode = trackCodeController.text.trim().toUpperCase();
+
+        await addShipmentCorreiosCubit.addShipment(Shipment(
+            name: nickname, code: trackingCode, company: actualCompany));
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +115,10 @@ class _AddShipmentFormState extends State<AddShipmentFormWidget> {
                 color: BoxedColors.gray,
               ),
             ),
+            icon: Icon(
+              PhosphorIcons.regular.caretDown,
+              color: BoxedColors.gray,
+            ),
             items: companies
                 .map<DropdownMenuItem<String>>(
                     (String value) => DropdownMenuItem<String>(
@@ -93,13 +126,17 @@ class _AddShipmentFormState extends State<AddShipmentFormWidget> {
                           child: Text(value),
                         ))
                 .toList(),
-            onChanged: (value) {},
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Este campo é obrigatório!';
               }
 
               return null;
+            },
+            onChanged: (value) {
+              setState(() {
+                actualCompany = value!;
+              });
             },
           ),
           const Divider(
@@ -131,6 +168,8 @@ class _AddShipmentFormState extends State<AddShipmentFormWidget> {
             color: BoxedColors.white,
           ),
           TextFormField(
+            controller: trackCodeController,
+            textCapitalization: TextCapitalization.characters,
             cursorColor: BoxedColors.gray,
             style: const TextStyle(fontSize: 14),
             decoration: InputDecoration(
@@ -168,8 +207,14 @@ class _AddShipmentFormState extends State<AddShipmentFormWidget> {
               prefixIconColor: BoxedColors.gray,
             ),
             validator: (value) {
+              final regExp = RegExp(r'[a-zA-Z]{2}[0-9]{9}[a-zA-Z]{2}');
+
               if (value == null || value.isEmpty) {
                 return 'Este campo é obrigatório!';
+              }
+
+              if (!regExp.hasMatch(value)) {
+                return 'O código inserido é inválido!';
               }
 
               return null;
@@ -204,6 +249,7 @@ class _AddShipmentFormState extends State<AddShipmentFormWidget> {
             color: BoxedColors.white,
           ),
           TextFormField(
+            controller: nickNameController,
             cursorColor: BoxedColors.gray,
             style: const TextStyle(fontSize: 14),
             decoration: InputDecoration(
@@ -256,27 +302,28 @@ class _AddShipmentFormState extends State<AddShipmentFormWidget> {
             height: 12,
             color: BoxedColors.white,
           ),
-          InkWell(
-            onTap: () {
-              if (_formKey.currentState!.validate()) {
-                Navigator.of(context).pop();
-              }
-            },
-            borderRadius: BorderRadius.circular(15),
-            splashColor: BoxedColors.grayLight,
-            child: Ink(
-              height: 60,
-              decoration: BoxDecoration(
-                color: BoxedColors.primary,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: const Align(
-                alignment: Alignment.center,
-                child: Text(
-                  'Adicionar remessa',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18,
+          BlocConsumer<ShipmentCorreiosCubit, ShipmentCorreiosState>(
+            listener: onShipmentListen,
+            builder: (context, state) => InkWell(
+              onTap: actualCompany.isNotEmpty ? submitForm : null,
+              borderRadius: BorderRadius.circular(15),
+              splashColor: BoxedColors.grayLight,
+              child: Ink(
+                height: 60,
+                decoration: BoxDecoration(
+                  color: actualCompany.isNotEmpty
+                      ? BoxedColors.primary
+                      : BoxedColors.grayLight,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: const Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Adicionar remessa',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ),

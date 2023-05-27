@@ -1,6 +1,9 @@
+import 'package:boxed/src/core/instances.dart';
+import 'package:boxed/src/logic/cubits/correios/shipment_correios_cubit.dart';
 import 'package:boxed/src/presentation/pages/getting_started_page.dart';
 import 'package:boxed/src/presentation/pages/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 abstract class Routes {
   static const gettingStarted = 'getting_started';

@@ -12,6 +12,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
+  }
+
   Future<void> refreshScreen() async {}
 
   @override
@@ -44,7 +51,7 @@ class _HomePageState extends State<HomePage> {
                 delegate: SliverChildBuilderDelegate(
                   childCount: 8,
                   (context, index) => Container(
-                    margin: EdgeInsets.only(bottom: index < 7 ? 10 : 40),
+                    margin: const EdgeInsets.only(bottom: 10),
                     child: const ShipmentCardItem(),
                   ),
                 ),

@@ -17,7 +17,8 @@ class MyApp extends StatelessWidget {
       children: [
         MaterialApp(
           onGenerateRoute: Routes.onGenerateRoute,
-          initialRoute: Routes.gettingStarted,
+          initialRoute:
+              isNotGettingStarted ? Routes.gettingStarted : Routes.home,
           theme: BoxedThemes.lightTheme,
         )
       ],
