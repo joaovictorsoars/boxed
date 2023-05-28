@@ -4,7 +4,8 @@ import 'package:boxed/src/data/repositories/correios/token_correios_repository.d
 import 'package:boxed/src/data/repositories/local_shipment/local_shipment_repository.dart';
 import 'package:boxed/src/logic/cubits/correios/shipment_correios_cubit.dart';
 import 'package:boxed/src/logic/cubits/correios/token_correios_cubit.dart';
-import 'package:boxed/src/logic/cubits/shipment/shipment_cubit.dart';
+import 'package:boxed/src/logic/cubits/shipment/get_events/get_shipment_events_cubit.dart';
+import 'package:boxed/src/logic/cubits/shipment/listing/listing_shipment_cubit.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 
@@ -30,7 +31,10 @@ abstract class Instances {
         localShipmentRepository: it.get(),
         correiosRepository: it.get()));
 
-    it.registerLazySingleton(() => ShipmentCubit(
+    it.registerLazySingleton(() => ListingShipmentCubit(
+        localShipmentRepository: it.get(), correiosRepository: it.get()));
+
+    it.registerLazySingleton(() => GetShipmentEventsCubit(
         localShipmentRepository: it.get(), correiosRepository: it.get()));
   }
 }

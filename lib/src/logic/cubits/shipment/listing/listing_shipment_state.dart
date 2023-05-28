@@ -1,13 +1,13 @@
 import 'package:boxed/src/data/models/shipment/shipment.dart';
 import 'package:equatable/equatable.dart';
 
-abstract class ShipmentState {}
+abstract class ListingShipmentState {}
 
-class InitialShipmentState implements ShipmentState {}
+class InitialListingShipmentState implements ListingShipmentState {}
 
-class ListingShipmentsState implements ShipmentState {}
+class ListingShipmentsState implements ListingShipmentState {}
 
-class ListedShipmentsState extends Equatable implements ShipmentState {
+class ListedShipmentsState extends Equatable implements ListingShipmentState {
   final List<Shipment> shipments;
 
   const ListedShipmentsState(this.shipments);
@@ -16,7 +16,8 @@ class ListedShipmentsState extends Equatable implements ShipmentState {
   List<Object?> get props => [shipments];
 }
 
-class ErrorListingShipmentsState extends Equatable implements ShipmentState {
+class ErrorListingShipmentsState extends Equatable
+    implements ListingShipmentState {
   final String message;
 
   const ErrorListingShipmentsState(this.message);
@@ -25,12 +26,12 @@ class ErrorListingShipmentsState extends Equatable implements ShipmentState {
   List<Object?> get props => [message];
 }
 
-class GettingShipmentsLastEventState implements ShipmentState {}
+class GettingShipmentsLastEventState implements ListingShipmentState {}
 
-class GettedShipmentsLastEventState implements ShipmentState {}
+class GettedShipmentsLastEventState implements ListingShipmentState {}
 
 class GetShipmentsLastEventErrorState extends Equatable
-    implements ShipmentState {
+    implements ListingShipmentState {
   final String? message;
   final int? code;
 

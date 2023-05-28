@@ -1,6 +1,6 @@
 import 'package:boxed/src/core/constants/colors.dart';
-import 'package:boxed/src/logic/cubits/shipment/shipment_cubit.dart';
-import 'package:boxed/src/logic/cubits/shipment/shipment_state.dart';
+import 'package:boxed/src/logic/cubits/shipment/listing/listing_shipment_cubit.dart';
+import 'package:boxed/src/logic/cubits/shipment/listing/listing_shipment_state.dart';
 import 'package:boxed/src/presentation/widgets/home_page/shipment_card_item.dart';
 import 'package:boxed/src/presentation/widgets/shared/boxed_appbar_widget.dart';
 import 'package:boxed/src/presentation/widgets/shared/new_shipment_floating_button_widget.dart';
@@ -15,20 +15,39 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
-  late final ShipmentCubit shipmentCubit = context.read();
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+  late final ListingShipmentCubit shipmentCubit = context.read();
+
+  bool pausedApp = false;
 
   @override
   void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       shipmentCubit.listShipments();
     });
-
-    super.initState();
   }
 
   Future<void> refreshScreen() async {
     shipmentCubit.listShipments();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused) {
+      pausedApp = true;
+    }
+    if (state == AppLifecycleState.resumed && pausedApp) {
+      refreshScreen();
+      pausedApp = false;
+    }
   }
 
   @override
@@ -37,10 +56,10 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: const NewShipmentFloatingButtonWidget(),
       body: RefreshIndicator(
         onRefresh: refreshScreen,
-        child: BlocBuilder<ShipmentCubit, ShipmentState>(
+        child: BlocBuilder<ListingShipmentCubit, ListingShipmentState>(
           builder: (context, state) => CustomScrollView(
             slivers: [
-              const BoxedAppBarWidget(),
+              const BoxedAppBarWidget(hasBack: false),
               SliverPadding(
                 padding: const EdgeInsets.only(left: 15, top: 10),
                 sliver: SliverList(
@@ -66,7 +85,9 @@ class _HomePageState extends State<HomePage> {
                           (context, index) => Container(
                               margin: const EdgeInsets.only(bottom: 10),
                               child: ShipmentCardItem(
-                                  shipment: state.shipments[index])),
+                                shipment: state.shipments[index],
+                                listingShipmentCubit: shipmentCubit,
+                              )),
                         ),
                       )
                     : state is ListingShipmentsState
@@ -75,7 +96,9 @@ class _HomePageState extends State<HomePage> {
                               childCount: 4,
                               (context, index) => Container(
                                   margin: const EdgeInsets.only(bottom: 10),
-                                  child: const ShipmentCardItem()),
+                                  child: ShipmentCardItem(
+                                    listingShipmentCubit: shipmentCubit,
+                                  )),
                             ),
                           )
                         : SliverToBoxAdapter(

@@ -1,4 +1,3 @@
-import 'package:boxed/src/data/models/correios/event.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class ShipmentCorreiosState {}

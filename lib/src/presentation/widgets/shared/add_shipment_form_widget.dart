@@ -1,10 +1,9 @@
 import 'package:boxed/src/core/constants/colors.dart';
 import 'package:boxed/src/core/constants/companies.dart';
 import 'package:boxed/src/core/instances.dart';
-import 'package:boxed/src/data/models/shipment/shipment.dart';
 import 'package:boxed/src/logic/cubits/correios/shipment_correios_cubit.dart';
 import 'package:boxed/src/logic/cubits/correios/shipment_correios_state.dart';
-import 'package:boxed/src/logic/cubits/shipment/shipment_cubit.dart';
+import 'package:boxed/src/logic/cubits/shipment/listing/listing_shipment_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -19,7 +18,7 @@ class AddShipmentFormWidget extends StatefulWidget {
 class _AddShipmentFormState extends State<AddShipmentFormWidget> {
   final nickNameController = TextEditingController();
   final trackCodeController = TextEditingController();
-  final List<String> companies = ['Correios', 'TNT Express', 'Sequoia'];
+  final List<String> companies = ['Correios'];
   final _formKey = GlobalKey<FormState>();
   late final ShipmentCorreiosCubit addShipmentCorreiosCubit =
       context.read<ShipmentCorreiosCubit>();
@@ -30,7 +29,7 @@ class _AddShipmentFormState extends State<AddShipmentFormWidget> {
     if (state is AddedShipmentCorreiosState) {
       Navigator.pop(context);
 
-      var shipmentCubit = Instances.it.get<ShipmentCubit>();
+      var shipmentCubit = Instances.it.get<ListingShipmentCubit>();
       shipmentCubit.listShipments();
     }
   }

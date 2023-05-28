@@ -1,16 +1,16 @@
 import 'package:boxed/src/data/models/shipment/shipment.dart';
 import 'package:boxed/src/data/repositories/correios/correios_repository.dart';
 import 'package:boxed/src/data/repositories/local_shipment/local_shipment_repository.dart';
-import 'package:boxed/src/logic/cubits/shipment/shipment_state.dart';
+import 'package:boxed/src/logic/cubits/shipment/listing/listing_shipment_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ShipmentCubit extends Cubit<ShipmentState> {
+class ListingShipmentCubit extends Cubit<ListingShipmentState> {
   final LocalShipmentRepository localShipmentRepository;
   final CorreiosRepository correiosRepository;
 
-  ShipmentCubit(
+  ListingShipmentCubit(
       {required this.localShipmentRepository, required this.correiosRepository})
-      : super(InitialShipmentState());
+      : super(InitialListingShipmentState());
 
   Future<void> listShipments() async {
     try {

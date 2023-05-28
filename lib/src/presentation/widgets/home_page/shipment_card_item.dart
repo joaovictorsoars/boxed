@@ -1,5 +1,7 @@
 import 'package:boxed/src/core/constants/colors.dart';
+import 'package:boxed/src/core/routes.dart';
 import 'package:boxed/src/data/models/shipment/shipment.dart';
+import 'package:boxed/src/logic/cubits/shipment/listing/listing_shipment_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -7,8 +9,10 @@ import 'package:shimmer/shimmer.dart';
 
 class ShipmentCardItem extends StatefulWidget {
   final Shipment? shipment;
+  final ListingShipmentCubit listingShipmentCubit;
 
-  const ShipmentCardItem({super.key, this.shipment});
+  const ShipmentCardItem(
+      {super.key, this.shipment, required this.listingShipmentCubit});
 
   @override
   State<ShipmentCardItem> createState() => _ShipmentCardItemState();
@@ -199,7 +203,10 @@ class _ShipmentCardItemState extends State<ShipmentCardItem> {
             ),
           )
         : InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).pushNamed(Routes.shipmentDetails,
+                  arguments: {'shipment': widget.shipment});
+            },
             borderRadius: BorderRadius.circular(15),
             splashColor: BoxedColors.grayLight,
             child: Ink(
